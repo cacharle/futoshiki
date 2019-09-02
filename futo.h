@@ -1,24 +1,27 @@
 #ifndef __FUTO_H__
 # define __FUTO_H__
 
+# include <stdbool.h>
+
 # define UNASSIGNED 0
-# define TRUE 1
-# define FALSE 0
 
 typedef int** Square;
 typedef struct
 {
-    int index_less;
-    int index_greater;
+    int index_lesser[2];
+    int index_greater[2];
 } Comparison;
 
-int		solve(Square square, Comparison *comparisons, int *solved);
-int comparisons_respected(Square square, Comparison *comparisons);
-int		find_next_unassigned(Square square, int *row, int *col);
-int		is_alone(Square square, int bfloor, int row, int col);
-int		**init_square(int size);
-int		**dup_square(int **square);
-void	destroy_square(int **square);
-void	print_square(Square square);
+// futo.c
+bool solve(Square square, Comparison *comparisons, int *solved);
+bool comparisons_respected(Square square, Comparison *comparisons);
+bool find_next_unassigned(Square square, int *row, int *col);
+bool is_alone(Square square, int bfloor, int row, int col);
+
+// square.c
+Square square_init(int size);
+Square square_dup(int **square);
+void square_destroy(int **square);
+void square_print(Square square);
 
 #endif

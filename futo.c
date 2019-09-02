@@ -1,86 +1,60 @@
+#include <stdio.h>
 #include <stdbool.h>
 #include "futo.h"
 
-/*
-** Find all the sudoku 4x4 grid recursively
-** print the one that checks out with the given viewpoints
-*/
-
-int	solve(Square square, Comparison *comparisons, int *solved)
+bool solve(Square square, Comparison *comparisons, int *solved)
 {
 	int		row;
 	int		col;
-	int		i;
-	Square	board_clone;
+	Square	square_clone;
 
 	if (!find_next_unassigned(square, &row, &col))
     {
-		print_square(square);
-		return (TRUE);
+		square_print(square);
+		return true;
     }
-	i = 0;
-	while (++i <= 4)
+    for (int i = 1; i <= 4; i++)
 	{
-		if (!is_alone(square, row, col, i))
+		if (!is_alone(square, i, row, col))
 			continue ;
-		board_clone = dup_square(square);
-		board_clone[row][col] = i;
-		if (solve(board_clone, comparisons, solved)
-            && comparisons_respected(board_clone, comparisons))
+		square_clone = square_dup(square);
+		square_clone[row][col] = i;
+		if (solve(square_clone, comparisons, solved)
+            && comparisons_respected(square_clone, comparisons))
 		{
-			*solved = TRUE;
-			destroy_square(board_clone);
-			return (TRUE);
+			*solved = true;
+			square_destroy(square_clone);
+			return true;
 		}
-		destroy_square(board_clone);
+		square_destroy(square_clone);
 	}
-	return (FALSE);
+	return false;
 }
 
-int comparisons_respected(Square square, Comparison *comparisons)
+bool comparisons_respected(Square square, Comparison *comparisons)
 {
 
     return false;
 }
 
-
-/*
-** Move `row` and `col` to the next unassigned(== 0) position
-** returns FALSE if the square is already filled with number, TRUE otherwise
-*/
-
-int	find_next_unassigned(Square square, int *row, int *col)
+bool find_next_unassigned(Square square, int *row, int *col)
 {
-	*row = 0;
-	while (*row < 4)
-	{
-		*col = 0;
-		while (*col < 4)
-		{
+    for (*row = 0; *row < 4; (*row)++)
+    {
+        for (*col = 0; *col < 4; (*col)++)
 			if (square[*row][*col] == UNASSIGNED)
-				return (TRUE);
-			(*col)++;
-		}
-		(*row)++;
-	}
-	return (FALSE);
+				return true;
+    }
+	return false;
 }
 
-/*
-** Check if `building_floor` is already is unique in the row and column
-*/
-
-int	is_alone(Square square, int row, int col, int building_floor)
+bool is_alone(Square square, int value, int row, int col)
 {
-	int i;
-
-	i = 0;
-	while (i < 4)
-		if (square[row][i++] == building_floor)
-			return (FALSE);
-	i = 0;
-	while (i < 4)
-		if (square[i++][col] == building_floor)
-			return (FALSE);
-	return (TRUE);
+    for (int i = 0; i < 4; i++)
+		if (i != col && square[row][i] == value)
+			return false;
+    for (int i = 0; i < 4; i++)
+		if (i != row && square[i][col] == value)
+			return false;
+	return true;
 }

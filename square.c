@@ -24,11 +24,11 @@
 ** initialize each cell to 0.
 */
 
-int		**init_square(int size)
+Square square_init(int size)
 {
 	int i;
 	int j;
-	int **square;
+	Square square;
 
 	square = malloc(sizeof(int*) * size);
 	i = 0;
@@ -48,13 +48,13 @@ int		**init_square(int size)
 ** and copy each element of `square` in it.
 */
 
-int		**dup_square(int **square)
+Square square_dup(int **square)
 {
 	int **clone;
 	int	i;
 	int	j;
 
-	clone = init_square(4);
+	clone = square_init(4);
 	i = 0;
 	while (i < 4)
 	{
@@ -73,7 +73,7 @@ int		**dup_square(int **square)
 ** Free each row of the square and the square itself.
 */
 
-void	destroy_square(int **square)
+void square_destroy(int **square)
 {
 	int i;
 
@@ -88,7 +88,7 @@ void	destroy_square(int **square)
 ** and each element of the row but the last followed by a space.
 */
 
-void	print_square(int **board)
+void square_print(Square square)
 {
 	int	i;
 	int	j;
@@ -99,7 +99,7 @@ void	print_square(int **board)
 		j = 0;
 		while (j < 4)
 		{
-			printf("%d", board[i][j]);
+			printf("%d", square[i][j]);
 			j++;
 			if (j != 4)
 				putchar(' ');
