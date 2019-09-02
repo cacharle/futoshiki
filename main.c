@@ -7,17 +7,16 @@ int main()
 {
     Square sq = square_init(4);
     int solved = false;
-    sq[0][0] = 4;
-    sq[0][3] = 2;
-    sq[1][1] = 1;
-    sq[3][3] = 4;
+    sq[2][0] = 2;
 
-    Comparison cs[1];
-    comparison_init(cs, 0, 0, 0, 1);
+    Comparison cs[5];
+    comparison_init(&cs[0], 1, 0, 1, 1);
+    comparison_init(&cs[1], 1, 3, 2, 3);
+    comparison_init(&cs[2], 2, 2, 3, 2);
+    comparison_init(&cs[3], 2, 3, 3, 3);
+    comparison_init(&cs[4], -1, -1, -1, -1);
 
     solve(sq, cs, &solved);
-
-
     square_destroy(sq);
 
 }

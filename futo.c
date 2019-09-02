@@ -10,17 +10,19 @@ bool solve(Square square, Comparison *comparisons, int *solved)
 
 	if (!find_next_unassigned(square, &row, &col))
     {
+        if (!comparisons_respected(square, comparisons))
+            return false;
 		square_print(square);
 		return true;
     }
+
     for (int i = 1; i <= 4; i++)
 	{
 		if (!is_alone(square, i, row, col))
 			continue ;
 		square_clone = square_dup(square);
 		square_clone[row][col] = i;
-		if (solve(square_clone, comparisons, solved)
-            && comparisons_respected(square_clone, comparisons))
+		if (solve(square_clone, comparisons, solved))
 		{
 			*solved = true;
 			square_destroy(square_clone);
@@ -31,10 +33,21 @@ bool solve(Square square, Comparison *comparisons, int *solved)
 	return false;
 }
 
+static int square_at(Square square, int *index)
+{
+    return square[index[0]][index[1]];
+}
+
 bool comparisons_respected(Square square, Comparison *comparisons)
 {
-
-    return false;
+    for (int i = 0; comparisons[i].index_lesser[0] != -1; i++)
+    {
+        int lesser = square_at(square, comparisons[i].index_lesser);
+        int greater = square_at(square, comparisons[i].index_greater);
+        if (lesser > greater)
+            return false;
+    }
+    return true;
 }
 
 bool find_next_unassigned(Square square, int *row, int *col)
