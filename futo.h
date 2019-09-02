@@ -5,7 +5,12 @@
 
 # define UNASSIGNED 0
 
-typedef int** Square;
+typedef struct
+{
+    int **self;
+    int len;
+} Square;
+
 typedef struct
 {
     int index_lesser[2];
@@ -13,15 +18,15 @@ typedef struct
 } Comparison;
 
 // futo.c
-bool solve(Square square, Comparison *comparisons, int *solved);
-bool comparisons_respected(Square square, Comparison *comparisons);
-bool find_next_unassigned(Square square, int *row, int *col);
-bool is_alone(Square square, int bfloor, int row, int col);
+bool solve(Square *square, Comparison *comparisons, int *solved);
+bool comparisons_respected(Square *square, Comparison *comparisons);
+bool find_next_unassigned(Square *square, int *row, int *col);
+bool is_alone(Square *square, int value, int row, int col);
 
 // square.c
-Square square_init(int size);
-Square square_dup(int **square);
-void square_destroy(int **square);
-void square_print(Square square);
+Square *square_init(int size);
+Square *square_dup(Square *square);
+void square_destroy(Square *square);
+void square_print(Square *square);
 
 #endif
